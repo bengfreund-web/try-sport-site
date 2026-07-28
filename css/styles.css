@@ -90,10 +90,6 @@ a { color: inherit; text-decoration: none; }
   .program-logo img { max-width: 220px; }
 }
 
-/* Highlighted TRY Rugby nav link */
-.site-nav a.nav-highlight { color: var(--accent-deep); font-weight: 700; }
-.site-nav a.nav-highlight:hover { color: var(--accent); }
-
 /* ---------- Typography ---------- */
 
 h1, h2, h3, h4 { font-weight: 700; line-height: 1.25; margin: 0 0 0.5em; }
