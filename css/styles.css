@@ -356,6 +356,52 @@ p { margin: 0 0 1em; }
 .carousel-btn:hover { background: var(--accent); color: #111; border-color: var(--accent); }
 .carousel-count { font-size: 0.85rem; color: var(--gray); font-variant-numeric: tabular-nums; min-width: 48px; }
 
+/* ---------- Schools marquee ---------- */
+
+.schools-section { overflow: hidden; }
+.schools-count { color: var(--accent); }
+
+.marquee {
+  margin-top: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+.marquee-row { display: flex; overflow: hidden; }
+.marquee-track {
+  display: flex;
+  gap: 12px;
+  flex-shrink: 0;
+  padding-right: 12px;
+  will-change: transform;
+  animation: marquee-scroll linear infinite;
+}
+.track-a { animation-duration: 42s; }
+.track-b { animation-duration: 52s; }
+.track-c { animation-duration: 38s; }
+.marquee-row.reverse .marquee-track { animation-direction: reverse; }
+@keyframes marquee-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.marquee:hover .marquee-track { animation-play-state: paused; }
+
+.school-chip {
+  flex-shrink: 0;
+  white-space: nowrap;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+  .marquee-row { overflow-x: auto; }
+}
+
 /* ---------- Footer ---------- */
 
 .site-footer { background: var(--primary-dark); color: rgba(255,255,255,0.85); padding: 60px 0 0; }
