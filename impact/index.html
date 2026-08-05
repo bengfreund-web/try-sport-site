@@ -79,7 +79,7 @@ section.hero{padding-top:clamp(30px,5vw,54px)}
 .stat .k{font-family:var(--body);font-weight:700;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
 .stat .v{font-family:var(--display);font-weight:800;font-size:clamp(32px,4.4vw,46px);letter-spacing:-.035em;line-height:1.05;margin:6px 0 4px;font-variant-numeric:tabular-nums}
 .stat .d{font-size:13.5px;color:var(--muted);line-height:1.4}
-.stat.accent .v{color:var(--try)}
+.stat.accent .v{color:var(--try-grid)}
 
 /* ---- two column ---- */
 .cols{display:grid;grid-template-columns:1.25fr .9fr;gap:clamp(20px,3vw,40px);align-items:start}
@@ -445,7 +445,7 @@ const yearKey = {y3:'2023/24', y4:'2024/25', y5:'2025/26'};
 const yearItems = Object.entries(yearKey).map(([k,label])=>{
   const done = S.filter(r=>r[k]==='Try Rugby - Completed').length;
   const sched = S.filter(r=>r[k]==='Try Rugby - Scheduled').length;
-  return {label, total:done+sched, segs:[{v:done,c:'var(--try)'},{v:sched,c:'var(--sched)'}],
+  return {label, total:done+sched, segs:[{v:done,c:'var(--try-grid)'},{v:sched,c:'var(--sched)'}],
           right:`${done}${sched?` +${sched}`:''}`, sub: sched?`${sched} scheduled`:''};
 });
 bars(document.getElementById('yearBars'), yearItems);
