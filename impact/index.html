@@ -47,7 +47,7 @@ section.hero{padding-top:clamp(30px,5vw,54px)}
 .sechead .note{color:var(--muted);font-size:14px;max-width:52ch}
 
 /* ---- hero ---- */
-.hero h1{font-size:clamp(32px,6.2vw,68px);max-width:19ch;margin:14px 0 0}
+.hero h1{font-size:clamp(32px,6.2vw,68px);max-width:19ch;margin:14px 0 0;line-height:1.16}
 .hero h1 em{font-style:normal;color:var(--try)}
 .hero .lede{margin-top:18px;max-width:62ch;font-size:clamp(16px,1.6vw,19px);color:var(--muted)}
 .hero .lede strong{color:var(--ink);font-weight:600}
@@ -266,7 +266,7 @@ dl.meth dd{margin:3px 0 0}
           </div>
           <div class="field">
             <label for="cost">Your cost per school (USD)</label>
-            <input type="number" id="cost" value="1500" min="0" step="50">
+            <input type="number" id="cost" value="1000" min="0" step="50">
           </div>
         </div>
         <div class="result">
@@ -274,7 +274,7 @@ dl.meth dd{margin:3px 0 0}
           <div><div class="v" id="calcCost">&mdash;</div><div class="k">Total investment</div></div>
           <div><div class="v" id="calcPer">&mdash;</div><div class="k">Cost per student</div></div>
         </div>
-        <p class="assume">The cost figure is a placeholder. Replace it with MIS's real per-school delivery cost before this goes in front of a donor.</p>
+        <p class="assume">Based on a $1,000 per-school delivery cost. Adjust it above to model different funding levels.</p>
       </div>
       <div class="card">
         <h3>Finish a region</h3>
