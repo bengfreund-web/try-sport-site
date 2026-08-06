@@ -340,7 +340,7 @@ p { margin: 0 0 1em; }
 .photo img { width: 100%; height: 100%; object-fit: cover; }
 
 /* centered accent beneath a section's copy */
-.photo-accent { max-width: 900px; margin: 2.6rem auto 0; }
+.photo-accent { max-width: 620px; margin: 2.6rem auto 0; }
 
 /* text-beside-photo layout, sharing the same .photo frame */
 .split {
