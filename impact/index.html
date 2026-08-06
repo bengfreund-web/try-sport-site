@@ -92,6 +92,11 @@ section.hero{padding-top:clamp(30px,5vw,54px)}
 .finding{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--try);border-radius:4px;padding:clamp(20px,3vw,30px)}
 .finding h3{font-size:clamp(19px,2.4vw,26px);max-width:24ch;line-height:1.12}
 .finding p{margin:12px 0 0;color:var(--muted);max-width:62ch;font-size:14.5px}
+.classdefs{list-style:none;margin:16px 0 0;padding:0}
+.classdefs li{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:10px 0;border-bottom:1px solid var(--line-soft)}
+.classdefs li:last-child{border-bottom:0}
+.classdefs b{color:var(--ink);font-weight:700;font-size:15px}
+.classdefs .rng{font-family:var(--mono);color:var(--muted);font-variant-numeric:tabular-nums;font-size:13.5px}
 .split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,3vw,34px);margin-top:22px}
 @media(max-width:600px){.split{grid-template-columns:1fr}}
 .split .side .h{font-family:var(--body);font-weight:700;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
@@ -254,12 +259,18 @@ dl.meth dd{margin:3px 0 0}
 <section id="classes">
   <div class="wrap">
     <div class="sechead"><h2>Reach by competition class</h2>
-      <p class="note">Montana high schools by MHSA classification &mdash; AA are the largest schools, C the smallest. Bars show where TRY Rugby or Rugby In A Box has been delivered.</p></div>
+      <p class="note">Montana high schools by MHSA competition class. Bars show where TRY Rugby or Rugby In A Box has been delivered.</p></div>
     <div class="cols">
       <div class="card"><h3>High schools delivered</h3><p class="sub">Of all classified Montana high schools in each class.</p><div id="classBars"></div></div>
       <div class="finding">
-        <h3 id="classFindingH">&mdash;</h3>
-        <p id="classFindingP">&mdash;</p>
+        <h3>What the classes mean</h3>
+        <p>MHSA places each high school by its grades 9&ndash;12 enrollment:</p>
+        <ul class="classdefs">
+          <li><b>Class AA</b><span class="rng">801+ students</span></li>
+          <li><b>Class A</b><span class="rng">301&ndash;800 students</span></li>
+          <li><b>Class B</b><span class="rng">101&ndash;300 students</span></li>
+          <li><b>Class C</b><span class="rng">100 or fewer</span></li>
+        </ul>
       </div>
     </div>
   </div>
@@ -499,11 +510,6 @@ bars(document.getElementById('classBars'), clsAgg.map(a=>{
     segs:[{v:p,c:'var(--try)'},{v:100-p,c:'var(--none)'}],
     right:`${p}%`, sub:`${a.d} of ${a.n}`};
 }));
-const aa = clsAgg[0];
-document.getElementById('classFindingH').textContent =
-  `You're in ${aa.d} of Montana's ${aa.n} largest high schools.`;
-document.getElementById('classFindingP').textContent =
-  `That's ${pct(aa.d,aa.n)}% of Class AA \u2014 TRY Rugby went to the biggest schools first, where a single visit reaches the most students, and coverage naturally thins toward the smaller Class C schools.`;
 
 /* ---------- map ---------- */
 (function(){
