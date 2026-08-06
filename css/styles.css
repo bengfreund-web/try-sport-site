@@ -409,11 +409,11 @@ p { margin: 0 0 1em; }
   padding-right: 14px;
   will-change: transform;
   /* one consistent speed for every row */
-  animation: marquee-scroll 55s linear infinite;
+  animation: marquee-scroll 90s linear infinite;
 }
 /* same speed, just offset the starting position so the rows aren't in lockstep */
-.track-b { animation-delay: -9s; }
-.track-c { animation-delay: -18s; }
+.track-b { animation-delay: -15s; }
+.track-c { animation-delay: -30s; }
 .marquee-row.reverse .marquee-track { animation-direction: reverse; }
 @keyframes marquee-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 .marquee:hover .marquee-track { animation-play-state: paused; }
