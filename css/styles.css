@@ -187,17 +187,19 @@ p { margin: 0 0 1em; }
 
 .hero {
   position: relative;
-  background: linear-gradient(160deg, #ffffff 0%, #f4f5f9 100%);
-  color: var(--charcoal);
-  padding: 110px 0;
+  background:
+    linear-gradient(180deg, rgba(18,18,24,0.52) 0%, rgba(18,18,24,0.70) 100%),
+    url('../img/photos/photo-4.jpg') center 26% / cover no-repeat;
+  color: #fff;
+  padding: 134px 0;
 }
 .hero-inner { max-width: 760px; }
-.hero .eyebrow { color: var(--accent-deep); filter: none; }
-.hero h1 { font-size: clamp(2.1rem, 5vw, 3.3rem); color: var(--primary); margin-bottom: 0.4em; font-weight: 800; }
-.hero-sub { font-size: 1.2rem; color: var(--gray); max-width: 56ch; margin-bottom: 2em; }
-.hero .btn-ghost { border-color: var(--primary); color: var(--primary); }
-.hero .btn-ghost:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
-.hero .scroll-cue { border-color: rgba(0,0,0,0.22); }
+.hero .eyebrow { color: var(--accent); filter: brightness(1.12); }
+.hero h1 { font-size: clamp(2.1rem, 5vw, 3.3rem); color: #fff; margin-bottom: 0.4em; font-weight: 800; text-shadow: 0 2px 18px rgba(0,0,0,0.25); }
+.hero-sub { font-size: 1.2rem; color: rgba(255,255,255,0.92); max-width: 56ch; margin-bottom: 2em; }
+.hero .btn-ghost { border-color: rgba(255,255,255,0.65); color: #fff; }
+.hero .btn-ghost:hover { background: rgba(255,255,255,0.15); color: #fff; border-color: #fff; }
+.hero .scroll-cue { border-color: rgba(255,255,255,0.45); }
 
 .scroll-cue {
   position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
