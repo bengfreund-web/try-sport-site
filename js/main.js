@@ -53,16 +53,22 @@ document.addEventListener("DOMContentLoaded", function () {
     var slides = car.querySelectorAll(".carousel-slide");
     var count = car.querySelector("[data-count]");
     if (!slides.length) return;
-    var idx = 0;
+    var idx = 0, timer = null;
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     function show(n) {
       slides[idx].classList.remove("is-active");
       idx = (n + slides.length) % slides.length;
       slides[idx].classList.add("is-active");
       if (count) count.textContent = (idx + 1) + " / " + slides.length;
     }
+    function stop() { if (timer) { clearInterval(timer); timer = null; } }
+    function start() { if (reduce) return; stop(); timer = setInterval(function () { show(idx + 1); }, 6000); }
     var prev = car.querySelector("[data-prev]");
     var next = car.querySelector("[data-next]");
-    if (prev) prev.addEventListener("click", function () { show(idx - 1); });
-    if (next) next.addEventListener("click", function () { show(idx + 1); });
+    if (prev) prev.addEventListener("click", function () { show(idx - 1); start(); });
+    if (next) next.addEventListener("click", function () { show(idx + 1); start(); });
+    car.addEventListener("mouseenter", stop);
+    car.addEventListener("mouseleave", start);
+    start();
   });
 });
