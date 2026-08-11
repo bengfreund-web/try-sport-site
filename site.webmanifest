@@ -1,0 +1,12 @@
+{
+  "name": "TRY Sport",
+  "short_name": "TRY Sport",
+  "icons": [
+    { "src": "/favicon-96.png", "sizes": "96x96", "type": "image/png" },
+    { "src": "/favicon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/favicon-512.png", "sizes": "512x512", "type": "image/png" }
+  ],
+  "theme_color": "#1c1c22",
+  "background_color": "#ffffff",
+  "display": "browser"
+}
