@@ -20,10 +20,16 @@ GEO  = os.path.join(os.path.dirname(os.path.abspath(__file__)), "geo.json")
 # --- PII allowlist: only these columns are ever read. Contact name/email/phone
 #     columns in the sheet are never touched. ---
 SAFE_COLUMNS = {
-    "School Name", "School Class", "Status", "Status 2025/2026", "Type",
+    "School Name", "School Class", "Status",
+    "Status 2026/2027", "Status 2025/2026", "Type",
     "City", "Catchment", "School Enrollment 25/26", "School Enrollment",
     "Status 2024/2025", "Status 2023/2024", "Lead",
 }
+
+# Scheduled/pipeline are read from the current planning season. Update this to
+# the newest "Status YYYY/YYYY" column each season (falls back to the prior one).
+CURRENT_SEASON = "Status 2026/2027"
+PRIOR_SEASON = "Status 2025/2026"
 
 # Type -> level band (authoritative map; heuristic fallback for unseen types).
 TBMAP = {
@@ -111,7 +117,7 @@ def build(rows, geo):
             "k": k, "k0": k,
             "b": band(typ),
             "t": typ,
-            "s": stage(status, r.get("Status 2025/2026", "")),
+            "s": stage(status, r.get(CURRENT_SEASON, "")),
             "e": to_int(r.get("School Enrollment 25/26") or r.get("School Enrollment")),
             "l": r.get("Lead", ""),
             "y3": r.get("Status 2023/2024", ""),
@@ -167,6 +173,21 @@ def main():
     m = re.search(r"const DATA = (\{.*?\});", html, re.S)
     if not m:
         sys.exit("Could not find DATA blob in impact/index.html")
+
+    # Preserve completed-season momentum fields (y3/y4/y5) when the CSV no longer
+    # carries them (e.g. a season column got dropped/shifted in the published
+    # sheet). Past seasons are static, so keep the prior value rather than blank.
+    try:
+        old = {norm(s["n"]): s for s in json.loads(m.group(1)).get("schools", [])}
+        for s in data["schools"]:
+            o = old.get(norm(s["n"]))
+            if o:
+                for y in ("y3", "y4", "y5"):
+                    if not s.get(y) and o.get(y):
+                        s[y] = o[y]
+    except Exception:
+        pass
+
     blob = "const DATA = " + json.dumps(data, separators=(",", ":"), ensure_ascii=False) + ";"
     new_html = html[:m.start()] + blob + html[m.end():]
     if new_html != html:
