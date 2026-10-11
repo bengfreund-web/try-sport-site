@@ -438,6 +438,10 @@ p { margin: 0 0 1em; }
   .marquee-row { overflow-x: auto; }
 }
 
+/* ---------- Instagram embed ---------- */
+.ig-embed { max-width: 540px; margin: 36px auto 0; }
+.ig-embed .instagram-media { margin: 0 auto !important; }
+
 /* ---------- Footer ---------- */
 
 .site-footer { background: var(--primary-dark); color: rgba(255,255,255,0.85); padding: 60px 0 0; }
