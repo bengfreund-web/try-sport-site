@@ -52,6 +52,11 @@ CITY_ALIAS = {
 CLASSES = {"AA","A","B","C"}
 REACHED = {"try","rib","scheduled"}
 
+# Stage strength for the high-water mark. A school that has ever reached a
+# "reached" stage (rank >= 3) never drops below it, even if a later sheet
+# revision reclassifies or removes it. Pipeline/none move freely.
+STAGE_RANK = {"none": 1, "pipeline": 2, "scheduled": 3, "rib": 4, "try": 4}
+
 
 def norm(x):
     return re.sub(r"\s+", " ", (x or "").strip()).lower().rstrip(".")
@@ -94,7 +99,7 @@ def load_rows(csv_text):
     return out
 
 
-def build(rows, geo):
+def build(rows, geo, old_schools=None):
     cert = set(geo["certified"])
     coords = geo["coords"]
     ncoords = {norm(c): v for c, v in coords.items()}
@@ -126,6 +131,30 @@ def build(rows, geo):
             "r": 0,
             "cls": cls if cls in CLASSES else "",
         })
+
+    # --- High-water mark merge with the previously published data ---
+    # A school that was ever "reached" (Try Rugby / Rugby In A Box / Scheduled)
+    # stays reached even if the current sheet reclassifies it to pipeline/none or
+    # drops it entirely. Also carries forward completed-season momentum (y3/y4/y5).
+    if old_schools:
+        oldmap = {norm(o["n"]): o for o in old_schools}
+        present = set()
+        for s in schools:
+            present.add(norm(s["n"]))
+            o = oldmap.get(norm(s["n"]))
+            if not o:
+                continue
+            for y in ("y3", "y4", "y5"):
+                if not s.get(y) and o.get(y):
+                    s[y] = o[y]
+            o_rank = STAGE_RANK.get(o.get("s"), 0)
+            if o_rank >= 3 and o_rank > STAGE_RANK.get(s["s"], 0):
+                s["s"] = o["s"]
+        # re-add reached schools that vanished from the current sheet
+        for o in old_schools:
+            if norm(o["n"]) not in present and STAGE_RANK.get(o.get("s"), 0) >= 3:
+                s2 = dict(o); s2["r"] = 0
+                schools.append(s2)
 
     # rank by enrollment desc, name for stable ties
     for i, s in enumerate(sorted(schools, key=lambda s: (-s["e"], s["n"])), 1):
@@ -165,28 +194,22 @@ def get_csv_text(args):
 def main():
     rows = load_rows(get_csv_text(sys.argv[1:]))
     geo = json.load(open(GEO))
-    data = build(rows, geo)
-    if len(data["schools"]) < 100:
-        sys.exit("Refusing to write: only %d schools parsed (bad CSV?)" % len(data["schools"]))
 
     html = open(HTML, encoding="utf-8").read()
     m = re.search(r"const DATA = (\{.*?\});", html, re.S)
     if not m:
         sys.exit("Could not find DATA blob in impact/index.html")
 
-    # Preserve completed-season momentum fields (y3/y4/y5) when the CSV no longer
-    # carries them (e.g. a season column got dropped/shifted in the published
-    # sheet). Past seasons are static, so keep the prior value rather than blank.
+    # Previously published schools, used for the high-water-mark merge and to
+    # carry forward completed-season momentum (y3/y4/y5). See build().
     try:
-        old = {norm(s["n"]): s for s in json.loads(m.group(1)).get("schools", [])}
-        for s in data["schools"]:
-            o = old.get(norm(s["n"]))
-            if o:
-                for y in ("y3", "y4", "y5"):
-                    if not s.get(y) and o.get(y):
-                        s[y] = o[y]
+        old_schools = json.loads(m.group(1)).get("schools", [])
     except Exception:
-        pass
+        old_schools = []
+
+    data = build(rows, geo, old_schools)
+    if len(data["schools"]) < 100:
+        sys.exit("Refusing to write: only %d schools parsed (bad CSV?)" % len(data["schools"]))
 
     blob = "const DATA = " + json.dumps(data, separators=(",", ":"), ensure_ascii=False) + ";"
     new_html = html[:m.start()] + blob + html[m.end():]
